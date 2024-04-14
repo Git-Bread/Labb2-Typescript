@@ -28,8 +28,13 @@ class todoList {
 
     //changes box to checkmark
     markTodoCompleted(index:number):void {
-        let change = document.getElementsByTagName("li")[index].children[1];
-        console.log("change");
+        if (this.todos[index].completed) {
+            this.todos[index].completed == false;    
+        }
+        else {
+            this.todos[index].completed == true;   
+        }
+        this.saveToLocalStorage;
     }
 
     //returnerar alla todos
@@ -56,7 +61,7 @@ populate();
 
 //creates new elements and populates table
 function populate() : void {
-    
+
     if (content == null) {
         return;
     }
@@ -72,22 +77,31 @@ function populate() : void {
     for (let index = 0; index < content.length; index++) {
         //create elements
         let container = document.createElement("tr");
-        let codeObject = document.createElement("td");
-        let nameObject = document.createElement("td");
+        let taskObject = document.createElement("td");
+
+        //checkbox logic
+        let completedContainer = document.createElement("td");
+        let completed = document.createElement("input");
+        completed.setAttribute("type", "checkbox");
+        completed.addEventListener("onchange", function(){
+            list.markTodoCompleted(this);
+        });
+
         let progressionObject = document.createElement("td");
         let syllabusObject = document.createElement("td");
         let option = document.createElement("option");
 
         //assign value
-        codeObject.innerHTML = content[index].task;
-        nameObject.innerHTML = content[index].completed.toString();
+        taskObject.innerHTML = content[index].task;
+        completed.checked = content[index].completed;
         progressionObject.innerHTML = content[index].priority.toString();
         syllabusObject.innerHTML = content[index].date.toString();
         option.innerHTML = content[index].task;
 
         //appends
-        container.append(codeObject);
-        container.append(nameObject);
+        container.append(taskObject);
+        completedContainer.append(completed);
+        container.append(completedContainer);
         container.append(progressionObject);
         container.append(syllabusObject);
         table.append(container);
