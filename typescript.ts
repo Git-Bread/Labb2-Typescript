@@ -45,8 +45,52 @@ class todoList {
     //load command
     loadFromLocalStorage():void {
         this.todos = JSON.parse(localStorage.getItem("todos") as string);
+        console.log(this.todos);
     }
  
 }
 
-let start = new todoList;
+let list = new todoList;
+let content = list.getTodos();
+populate();
+
+//creates new elements and populates table
+function populate() : void {
+    
+    if (content == null) {
+        return;
+    }
+
+    let table = document.getElementsByTagName("table")[0];
+    let select = document.getElementsByTagName("select")[0];
+
+    //removes all old tables to stop duplicate
+    while (table.children[1]) {
+        table.removeChild(table.lastChild as HTMLElement);
+    }
+
+    for (let index = 0; index < content.length; index++) {
+        //create elements
+        let container = document.createElement("tr");
+        let codeObject = document.createElement("td");
+        let nameObject = document.createElement("td");
+        let progressionObject = document.createElement("td");
+        let syllabusObject = document.createElement("td");
+        let option = document.createElement("option");
+
+        //assign value
+        codeObject.innerHTML = content[index].task;
+        nameObject.innerHTML = content[index].completed.toString();
+        progressionObject.innerHTML = content[index].priority.toString();
+        syllabusObject.innerHTML = content[index].date.toString();
+        option.innerHTML = content[index].task;
+
+        //appends
+        container.append(codeObject);
+        container.append(nameObject);
+        container.append(progressionObject);
+        container.append(syllabusObject);
+        table.append(container);
+        select.append(option);
+    }
+}
