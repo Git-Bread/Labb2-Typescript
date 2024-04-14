@@ -19,11 +19,32 @@
                 </tr>
             </table>
         </section>
-        <form>
-            <select>
-                
-            </select>
-        </form>
+        <section>
+            <form>
+                <h2>Ny Att Göra</h2>
+                <label for="newTodo">Ny Att Göra</label>
+                <input type="text" name="newTodo" id="newTodo">
+                <label for="importance">Viktighet</label>
+                <input type="number" name="importance" id="importance">
+                <div>
+                    <button type="button" id="">Ny Att Göra</button>
+                    <button type="reset">Rensa</button>
+                </div>
+            </form>
+            <form>
+                <h2>Ändra Att Göra</h2>
+                <label for="task">Att Göra</label>
+                <select name="task" id="task">
+                </select>
+                <label for="taskContent">Ändra Beskrivning</label>
+                <input type="text" name="taskContent" id="taskContent">
+                <label for="importanceChange">Viktighet</label>
+                <input type="number" name="importanceChange" id="importanceChange">
+                <div>
+                    <button type="button" id="">Ändra</button>
+                    <button type="reset">Rensa</button>
+                </div>
+            </form>
         <script src="typescript.ts" async defer></script>
     </body>
 </html>
