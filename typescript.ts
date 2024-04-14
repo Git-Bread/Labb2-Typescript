@@ -18,12 +18,10 @@ class todoList {
         try {
             let newTodo : todo = {task: task, completed: completed, priority: priority, date: currentDate};
 
-            if (priority >= 3) {
+            if (priority > 3) {
                 throw ("fel prioritet får vara mellan 1-3");
             }
-
-                //checks for duplicate
-
+            //checks for duplicate
             for (let index = 0; index < this.todos.length; index++) {
                 if (this.todos[index].task == task) {
                 throw ("finns redan en med detta namn");
@@ -118,6 +116,10 @@ function populate() : void {
     //removes all old tables to stop duplicate
     while (table.children[1]) {
         table.removeChild(table.lastChild as HTMLElement);
+    }
+
+    while (select.children[1]) {
+        select.removeChild(select.lastChild as HTMLElement);
     }
 
     for (let index = 0; index < content.length; index++) {

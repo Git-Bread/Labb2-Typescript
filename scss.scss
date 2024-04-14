@@ -29,6 +29,9 @@ body {
                 padding: 0.2em;
                 text-align: center;
                 font-size: 1.3em;
+                input {
+                    transform: scale(2);
+                }
             }
             td:first-of-type {
                 text-align: left;
