@@ -1,7 +1,8 @@
 interface todo {
     task: string,
     completed: boolean,
-    priority: 1|2|3
+    priority: 1|2|3,
+    date: Date
 }
 
 class todoList {
@@ -12,9 +13,11 @@ class todoList {
     
     //adds task
     addTodo(task: string, completed: boolean, priority: 1|2|3):boolean {
+        let currentDate = new Date();
         try {
-            let newTodo : todo = {task: task, completed: completed, priority: priority};
+            let newTodo : todo = {task: task, completed: completed, priority: priority, date: currentDate};
             this.todos.push(newTodo);
+            this.saveToLocalStorage;
             this.constructor;
             return true
         } catch (error) { 
