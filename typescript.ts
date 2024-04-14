@@ -1,40 +1,67 @@
 interface todo {
     task: string,
     completed: boolean,
-    priority: 1|2|3,
-    date: Date
+    priority: number,
+    date: string
 }
 
 class todoList {
-    public todos: todo[];
+    todos: todo[] = [];
     constructor() {
         this.loadFromLocalStorage();
     }
     
     //adds task
-    addTodo(task: string, completed: boolean, priority: 1|2|3):boolean {
-        let currentDate = new Date();
+    addTodo(task: string, completed: boolean, priority: number):boolean {
+        let currentDate = new Date().toISOString().split('T')[0];;
+        
         try {
             let newTodo : todo = {task: task, completed: completed, priority: priority, date: currentDate};
+
+            if (priority >= 3) {
+                throw ("fel prioritet får vara mellan 1-3");
+            }
+
+                //checks for duplicate
+
+            for (let index = 0; index < this.todos.length; index++) {
+                if (this.todos[index].task == task) {
+                throw ("finns redan en med detta namn");
+            }
+    }
+
             this.todos.push(newTodo);
-            this.saveToLocalStorage;
+            this.saveToLocalStorage();
             this.constructor;
             return true
         } catch (error) { 
+            console.log(error)
             window.alert("felinmatning utav värden: " + error);
             return false
         }
     }
 
+    //removes todo
+    removeTodo(name:string):void {
+        console.log(name)
+        for (let index = 0; index < this.todos.length; index++) {
+            if(this.todos[index].task.match(name)) {
+                this.todos.splice(index, 1);
+            }
+        }
+        this.saveToLocalStorage();
+    }
+
     //changes box to checkmark
     markTodoCompleted(index:number):void {
         if (this.todos[index].completed) {
-            this.todos[index].completed == false;    
+            this.todos[index].completed = false;
         }
         else {
-            this.todos[index].completed == true;   
+            this.todos[index].completed = true;   
         }
-        this.saveToLocalStorage;
+        console.log(this.todos[index]);
+        this.saveToLocalStorage();
     }
 
     //returnerar alla todos
@@ -45,27 +72,46 @@ class todoList {
     //save command
     saveToLocalStorage():void {
         localStorage.setItem("todos", JSON.stringify(this.todos));
+        console.log("saved");
     }
 
     //load command
     loadFromLocalStorage():void {
         this.todos = JSON.parse(localStorage.getItem("todos") as string);
         console.log(this.todos);
+        if (this.todos == null) {
+            this.todos = [];
+        }
     }
  
 }
 
 let list = new todoList;
-let content = list.getTodos();
-populate();
+startup();
+
+//startup logic
+function startup() : void {
+    const submit1 = document.getElementById("add");
+    const submit2 = document.getElementById("change");
+    const clear1 = document.getElementById("resetAdd");
+    clear1?.addEventListener("click", function(){clear(this)});
+    submit1?.addEventListener("click", function(){add(this)});
+    submit2?.addEventListener("click", function(){remove()});
+    if (list.getTodos() != null) {
+        populate();
+    }
+}
+
+//emties fields by calling reset
+function clear(object : HTMLElement) : void {
+    let parent = object.parentElement?.parentElement as HTMLFormElement;
+    parent.reset();
+}
 
 //creates new elements and populates table
 function populate() : void {
 
-    if (content == null) {
-        return;
-    }
-
+    let content = list.getTodos();
     let table = document.getElementsByTagName("table")[0];
     let select = document.getElementsByTagName("select")[0];
 
@@ -83,8 +129,8 @@ function populate() : void {
         let completedContainer = document.createElement("td");
         let completed = document.createElement("input");
         completed.setAttribute("type", "checkbox");
-        completed.addEventListener("onchange", function(){
-            list.markTodoCompleted(this);
+        completed.addEventListener("change", function(){
+            list.markTodoCompleted(index);
         });
 
         let progressionObject = document.createElement("td");
@@ -107,4 +153,27 @@ function populate() : void {
         table.append(container);
         select.append(option);
     }
+}
+
+//adds new entry to course array
+function add(object : HTMLElement) : void {
+    let form = object.parentElement?.parentElement;
+
+    //checks so that information is not empty
+    if (form?.getElementsByTagName("input")[0].value == "" || 
+    form?.getElementsByTagName("input")[1].value == "") {
+        window.alert("alla fält behöver information");
+        return;
+    }
+
+    //threw errors when it was defined with number, not sure how to elegantly solve it but since its restricted to numbers anyways ill add a any
+    list.addTodo(form?.getElementsByTagName("input")[0].value as string, false, form?.getElementsByTagName("input")[1].value as any)
+
+    clear(object);
+    populate();
+}
+    
+function remove() : void {
+    list.removeTodo(document.getElementsByTagName("select")[0].value);
+    populate();
 }
